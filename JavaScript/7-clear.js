@@ -1,19 +1,16 @@
 'use strict';
 
-class Shift {
-  constructor(offset) {
-    this.offset = offset;
-  }
-
-  move({ x, y }) {
-    const { dx, dy } = this.offset;
-    return { x: x + dx, y: y + dy };
-  }
-}
+const move = (offset) => (point) => {
+  const moved = {
+    x: point.x + offset.dx,
+    y: point.y + offset.dy,
+  };
+  return moved;
+};
 
 const parsers = {
   string: JSON.parse,
-  object: (x) => x,
+  object: (obj) => obj,
 };
 
 const conditionalParse = (item) => {
@@ -28,7 +25,7 @@ const polyline = [
   { x: 30, y: 30 },
 ];
 
-const shift = new Shift({ dx: 10, dy: -5 });
+const offset = move({ dx: 10, dy: -5 });
 const parsed = polyline.map(conditionalParse);
-const path = parsed.map((point) => shift.move(point));
+const path = parsed.map(offset);
 console.log({ path });
